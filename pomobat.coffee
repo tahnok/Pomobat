@@ -4,17 +4,31 @@ class Pomobat extends Batman.App
   @root 'pomodoros#all'
 
 class Pomobat.PomodorosController extends Batman.Controller
+  constructor: ->
+     super
+     @set 'newPomodoro', new Pomobat.Pomodoro(state: "new")
+
   all: ->
     @set 'pomodoros', Pomobat.Pomodoro.get('all')
 
-class Pomobat.Pomodoro extends Batman.Model
-  @encode 'title', 'completed'
-  @persist Batman.LocalStorage
+  createPomodoro: ->
+    console.log("WTF?")
+    @get('newPomodoro').save (err, pomodoro) =>
+      if err
+        throw err unless err instanceof Batman.ErrorsSet
+      else
+        @set 'newPomodoro', new Pomobat.Pomodoro(state: "new")
 
-  @classAccessor 'completed', ->
-      @get('all').filter (todo) -> todo.get('completed')
+  saveAndClear: ->
+    console.log("heya")
+
+class Pomobat.Pomodoro extends Batman.Model
+  @encode 'title', 'state'
+  @persist Batman.LocalStorage
+  @storageKey: 'pomodoros-batman'
 
 # Make Pomobat available in the global namespace so it can be used
 # as a namespace and bound to in views.
 window.Pomobat = Pomobat
 Pomobat.run()
+console.log("running")

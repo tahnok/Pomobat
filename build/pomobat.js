@@ -24,11 +24,34 @@
     __extends(PomodorosController, _super);
 
     function PomodorosController() {
-      return PomodorosController.__super__.constructor.apply(this, arguments);
+      PomodorosController.__super__.constructor.apply(this, arguments);
+      this.set('newPomodoro', new Pomobat.Pomodoro({
+        state: "new"
+      }));
     }
 
     PomodorosController.prototype.all = function() {
       return this.set('pomodoros', Pomobat.Pomodoro.get('all'));
+    };
+
+    PomodorosController.prototype.createPomodoro = function() {
+      var _this = this;
+      console.log("WTF?");
+      return this.get('newPomodoro').save(function(err, pomodoro) {
+        if (err) {
+          if (!(err instanceof Batman.ErrorsSet)) {
+            throw err;
+          }
+        } else {
+          return _this.set('newPomodoro', new Pomobat.Pomodoro({
+            state: "new"
+          }));
+        }
+      });
+    };
+
+    PomodorosController.prototype.saveAndClear = function() {
+      return console.log("heya");
     };
 
     return PomodorosController;
@@ -43,15 +66,11 @@
       return Pomodoro.__super__.constructor.apply(this, arguments);
     }
 
-    Pomodoro.encode('title', 'completed');
+    Pomodoro.encode('title', 'state');
 
     Pomodoro.persist(Batman.LocalStorage);
 
-    Pomodoro.classAccessor('completed', function() {
-      return this.get('all').filter(function(todo) {
-        return todo.get('completed');
-      });
-    });
+    Pomodoro.storageKey = 'pomodoros-batman';
 
     return Pomodoro;
 
@@ -60,5 +79,7 @@
   window.Pomobat = Pomobat;
 
   Pomobat.run();
+
+  console.log("running");
 
 }).call(this);

@@ -15,9 +15,8 @@
   <div data-defineview="pomodoros/all" id="batman">
     <span>Pomobat</span>
   </div>
-  <form>
-    <input = "text"></input>
-    <button action="submit">Pew</button>
+  <form data-formfor-pomodoro="newPomodoro" data-event-submit="createPomodoro">
+    <input id="new pomodoro" placeholder="What needs to be completed?" autofocus type="text" data-bind="pomodoro.title" data-event-keypress="saveAndClear">
   </form>
 </body>
 </html>
