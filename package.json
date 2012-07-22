@@ -1,0 +1,24 @@
+{
+  "author": "Wesley Ellis <tahnok@gmail.com.com>",
+  "name": "Pomobat",
+  "description": "A batman implementaiton of the pomodoro technique",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tahnok/Pomobat"
+  },
+  "main": "build/app.js",
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {
+    "batman": "~>0.1.0"
+  },
+  "devDependencies": {},
+  "batman": {
+    "appName": "Pomobat",
+    "build": true,
+    "buildDir": "./build"
+  },
+  "license": "MIT"
+}
