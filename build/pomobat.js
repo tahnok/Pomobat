@@ -36,7 +36,6 @@
 
     PomodorosController.prototype.createPomodoro = function() {
       var _this = this;
-      console.log("WTF?");
       return this.get('newPomodoro').save(function(err, pomodoro) {
         if (err) {
           if (!(err instanceof Batman.ErrorsSet)) {
@@ -50,8 +49,12 @@
       });
     };
 
-    PomodorosController.prototype.saveAndClear = function() {
-      return console.log("heya");
+    PomodorosController.prototype.startPomodoro = function() {
+      var pomodoro;
+      pomodoro = this.get('newPomodoro');
+      pomodoro.set('state', 'running');
+      pomodoro.save();
+      return console.log(pomodoro.get('title'));
     };
 
     return PomodorosController;
@@ -71,6 +74,18 @@
     Pomodoro.persist(Batman.LocalStorage);
 
     Pomodoro.storageKey = 'pomodoros-batman';
+
+    Pomodoro.accessor('running', function() {
+      if (this.get('state') === 'running') {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    Pomodoro.prototype.tester = function() {
+      return true;
+    };
 
     return Pomodoro;
 

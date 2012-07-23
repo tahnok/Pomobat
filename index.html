@@ -12,11 +12,15 @@
 
 <body>
   <div data-yield="main"></div>
-  <div data-defineview="pomodoros/all" id="batman">
-    <span>Pomobat</span>
+  <div data-defineview="pomodoros/all">
+    <h1>Pomobat</h1>
+
+    <div class="newPomodor" data-hideif="newPomodoro.running">
+      <form data-formfor-pomodoro="newPomodoro" data-event-submit="startPomodoro">
+        <input id="newPomodoro" placeholder="What needs to be completed?" autofocus type="text" data-bind="pomodoro.title" >
+        <button>Start</button>
+      </form>
+    </div>
   </div>
-  <form data-formfor-pomodoro="newPomodoro" data-event-submit="createPomodoro">
-    <input id="new pomodoro" placeholder="What needs to be completed?" autofocus type="text" data-bind="pomodoro.title" data-event-keypress="saveAndClear">
-  </form>
 </body>
 </html>
