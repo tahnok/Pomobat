@@ -11,25 +11,31 @@
 </head>
 
 <body>
+  <center>
   <div data-yield="main"></div>
   <div data-defineview="pomodoros/all">
-    <div data-showif="newPomodoro.new">
-      <form data-formfor-pomodoro="newPomodoro" data-event-submit="startPomodoro">
-        <input id="newPomodoro" placeholder="What needs to be completed?" autofocus type="text" data-bind="pomodoro.title" >
-        <button>Start</button>
+    <h1>Pomoboat</h1>
+    <div data-showif="currentPomodoro.new">
+      <form data-formfor-pomodoro="currentPomodoro" data-event-submit="startPomodoro">
+        <button><h3>Start</h3></button>
+        <br>
+        <br>
+        <input id="currentPomodoro" placeholder="what are you working on?" autofocus type="text" data-bind="pomodoro.title" >
       </form>
     </div>
-    <div data-hideif="newPomodoro.new">
-      <h1 data-bind="timeLeft"></h1>
-      <div data-hideif="newPomodoro.finished">
-        <button>Pause</button>
-        <button>Stop</button>
+    <div data-hideif="currentPomodoro.new">
+      <span data-showif="currentPomodoro.title.length">Working on: </span><span data-bind="currentPomodoro.title"></span>
+      <h2 data-bind="timeLeft"></h2>
+      <div data-hideif="currentPomodoro.finished">
+        <button data-event-click="togglePomodoro">Pause/Resume</button>
+        <button data-event-click="stopPomodoro">Cancel</button>
       </div>
-      <div data-showif="newPomodoro.finished">
+      <div data-showif="currentPomodoro.finished">
         <button data-event-click="startBreak">Break time</button>
-        <button>New</button>
+        <button data-event-click="createPomodoro">New Pomodoro</button>
       </div>
     </div>
   </div>
+  </center>
 </body>
 </html>

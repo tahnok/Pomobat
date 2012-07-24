@@ -31,7 +31,7 @@
 
       this.updatePomodoro = __bind(this.updatePomodoro, this);
       PomodorosController.__super__.constructor.apply(this, arguments);
-      this.set('newPomodoro', new Pomobat.Pomodoro({
+      this.set('currentPomodoro', new Pomobat.Pomodoro({
         state: "new"
       }));
     }
@@ -42,22 +42,23 @@
 
     PomodorosController.prototype.createPomodoro = function() {
       var _this = this;
-      return this.get('newPomodoro').save(function(err, pomodoro) {
+      return this.get('currentPomodoro').save(function(err, pomodoro) {
         if (err) {
           if (!(err instanceof Batman.ErrorsSet)) {
             throw err;
           }
         } else {
-          return _this.set('newPomodoro', new Pomobat.Pomodoro({
+          _this.set('currentPomodoro', new Pomobat.Pomodoro({
             state: "new"
           }));
+          return _this.set('paused', false);
         }
       });
     };
 
     PomodorosController.prototype.startPomodoro = function() {
       var pomodoro;
-      pomodoro = this.get('newPomodoro');
+      pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'running');
       pomodoro.set('timeLeft', '0:10');
       pomodoro.save();
@@ -65,14 +66,48 @@
     };
 
     PomodorosController.prototype.updatePomodoro = function(time) {
-      return this.get('newPomodoro').set('timeLeft', time);
+      return this.get('currentPomodoro').set('timeLeft', time);
     };
 
     PomodorosController.prototype.donePomodoro = function() {
       var pomodoro;
-      pomodoro = this.get('newPomodoro');
+      pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'finished');
       return alert("Pomodoro done!");
+    };
+
+    PomodorosController.prototype.togglePomodoro = function() {
+      var state;
+      state = this.get('paused');
+      if (state) {
+        this.resumePomodoro();
+      } else {
+        this.pausePomodoro();
+      }
+      console.log(state);
+      return this.set('paused', !state);
+    };
+
+    PomodorosController.prototype.pausePomodoro = function() {
+      var pomodoro;
+      this.stopTimer();
+      pomodoro = this.get('currentPomodoro');
+      return pomodoro.set('state', 'paused');
+    };
+
+    PomodorosController.prototype.resumePomodoro = function() {
+      var pomodoro;
+      this.startTimer(this.get('timeLeft'), this.donePomodoro, this.updatePomodoro);
+      pomodoro = this.get('currentPomodoro');
+      return pomodoro.set('state', 'running');
+    };
+
+    PomodorosController.prototype.stopPomodoro = function() {
+      var pomodoro;
+      this.stopTimer();
+      pomodoro = this.get('currentPomodoro');
+      pomodoro.set('state', 'cancelled');
+      return this.createPomodoro();
     };
 
     PomodorosController.prototype.startBreak = function() {
@@ -81,9 +116,7 @@
 
     PomodorosController.prototype.doneBreak = function() {
       alert("break's over! get back to work!");
-      return this.set('newPomodoro', new Pomobat.Pomodoro({
-        state: "new"
-      }));
+      return this.createPomodoro();
     };
 
     PomodorosController.prototype.startTimer = function(time, done, update) {
@@ -92,7 +125,13 @@
       window.tick = function() {
         return _this.tick(done, update);
       };
-      return setTimeout(window.tick, 1000);
+      return this.set('timeoutID', setTimeout(window.tick, 1000));
+    };
+
+    PomodorosController.prototype.pauseTimer = function() {};
+
+    PomodorosController.prototype.stopTimer = function() {
+      return window.clearTimeout(this.get('timeoutID'));
     };
 
     PomodorosController.prototype.tick = function(done, update) {
@@ -117,7 +156,7 @@
           update(time);
         }
         this.set('timeLeft', time);
-        return setTimeout(window.tick, 1000);
+        return this.set('timeoutID', setTimeout(window.tick, 1000));
       }
     };
 

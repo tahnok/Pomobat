@@ -6,45 +6,76 @@ class Pomobat extends Batman.App
 class Pomobat.PomodorosController extends Batman.Controller
   constructor: ->
      super
-     @set 'newPomodoro', new Pomobat.Pomodoro(state: "new")
+     @set('currentPomodoro', new Pomobat.Pomodoro(state: "new"))
 
   all: ->
-    @set 'pomodoros', Pomobat.Pomodoro.get('all')
+    @set('pomodoros', Pomobat.Pomodoro.get('all'))
 
   createPomodoro: ->
-    @get('newPomodoro').save (err, pomodoro) =>
+    @get('currentPomodoro').save (err, pomodoro) =>
       if err
         throw err unless err instanceof Batman.ErrorsSet
       else
-        @set 'newPomodoro', new Pomobat.Pomodoro(state: "new")
+        @set('currentPomodoro', new Pomobat.Pomodoro(state: "new"))
+        @set('paused', false)
 
   startPomodoro: ->
-    pomodoro = @get('newPomodoro')
+    pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'running')
     pomodoro.set('timeLeft', '0:10')
     pomodoro.save()
     @startTimer('0:10', @donePomodoro, @updatePomodoro)
 
   updatePomodoro: (time) =>
-    @get('newPomodoro').set('timeLeft', time)
+    @get('currentPomodoro').set('timeLeft', time)
 
   donePomodoro: =>
-    pomodoro = @get('newPomodoro')
+    pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'finished')
     alert("Pomodoro done!")
+
+  togglePomodoro: ->
+    state = @get('paused')
+    if state
+      @resumePomodoro()
+    else
+      @pausePomodoro()
+    console.log(state)
+    @set('paused', !state)
+
+  pausePomodoro: ->
+    @stopTimer()
+    pomodoro = @get('currentPomodoro')
+    pomodoro.set('state', 'paused')
+
+  resumePomodoro: ->
+    @startTimer(@get('timeLeft'), @donePomodoro, @updatePomodoro)
+    pomodoro = @get('currentPomodoro')
+    pomodoro.set('state', 'running')
+
+  stopPomodoro: ->
+    @stopTimer()
+    pomodoro = @get('currentPomodoro')
+    pomodoro.set('state', 'cancelled')
+    @createPomodoro()
 
   startBreak: ->
     @startTimer("0:05", @doneBreak)
 
   doneBreak: =>
     alert("break's over! get back to work!")
-    @set 'newPomodoro', new Pomobat.Pomodoro(state: "new")
+    @createPomodoro()
 
   startTimer:(time, done, update) ->
     @set('timeLeft', time)
     window.tick = =>
       @tick(done, update)
-    setTimeout(window.tick, 1000)
+    @set('timeoutID', setTimeout(window.tick, 1000))
+
+  pauseTimer: ->
+
+  stopTimer: ->
+    window.clearTimeout(@get('timeoutID'))
 
   tick:(done, update) ->
     time = @get('timeLeft').split(":")
@@ -62,7 +93,7 @@ class Pomobat.PomodorosController extends Batman.Controller
       time = "" + minutes + ":" + seconds
       update(time) if update
       @set('timeLeft', time)
-      setTimeout(window.tick, 1000)
+      @set('timeoutID', setTimeout(window.tick, 1000))
 
 
 class Pomobat.Pomodoro extends Batman.Model
