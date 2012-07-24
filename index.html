@@ -13,13 +13,22 @@
 <body>
   <div data-yield="main"></div>
   <div data-defineview="pomodoros/all">
-    <h1>Pomobat</h1>
-
-    <div class="newPomodor" data-hideif="newPomodoro.running">
+    <div data-showif="newPomodoro.new">
       <form data-formfor-pomodoro="newPomodoro" data-event-submit="startPomodoro">
         <input id="newPomodoro" placeholder="What needs to be completed?" autofocus type="text" data-bind="pomodoro.title" >
         <button>Start</button>
       </form>
+    </div>
+    <div data-hideif="newPomodoro.new">
+      <h1 data-bind="timeLeft"></h1>
+      <div data-hideif="newPomodoro.finished">
+        <button>Pause</button>
+        <button>Stop</button>
+      </div>
+      <div data-showif="newPomodoro.finished">
+        <button data-event-click="startBreak">Break time</button>
+        <button>New</button>
+      </div>
     </div>
   </div>
 </body>
