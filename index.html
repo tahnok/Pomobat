@@ -34,7 +34,7 @@
       </div>
       <div data-hideif="currentPomodoro.new" class="well">
         <span data-showif="currentPomodoro.title.length">Working on: </span><span data-bind="currentPomodoro.title"></span>
-        <h2 data-bind="timeLeft"></h2>
+        <h1 data-bind="timeLeft"></h1>
         <div data-hideif="currentPomodoro.finished">
           <a href="#" class="btn" data-event-click="togglePomodoro"><i class="icon-pause"></i> Pause/Resume</a> <a href="#" class="btn btn-danger" data-event-click="stopPomodoro"><i class="icon-stop icon-white"></i> Cancel</a>
         </div>
@@ -43,7 +43,16 @@
           <a href="#" class="btn btn-inverse" data-event-click="createPomodoro"><i class="icon-repeat icon-white"></i> New Pomodoro</a>
         </div>
       </div>
+      <div>
+        Pomodoros completed: <span data-bind="Pomodoro.finished.length" class="badge badge-success"></span>
+      <!--         <ul>
+          <li data-foreach-pomodoro="pomodoros"><span data-bind="pomodoro.title"></span>
+          </li>
+        </ul> -->
+      </div>
+      <footer><a href="mailto:tahnok@gmail.com">Wesley Ellis</a></footer>
     </div>
+
   </div>
 </body>
 </html>

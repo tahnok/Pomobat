@@ -73,6 +73,7 @@
       var pomodoro;
       pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'finished');
+      pomodoro.save;
       return alert("Pomodoro done!");
     };
 
@@ -200,6 +201,12 @@
       } else {
         return false;
       }
+    });
+
+    Pomodoro.classAccessor('finished', function() {
+      return this.get('all').filter(function(pomodoro) {
+        return pomodoro.get('state') === 'finished';
+      });
     });
 
     return Pomodoro;

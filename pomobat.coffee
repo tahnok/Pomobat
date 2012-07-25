@@ -32,6 +32,7 @@ class Pomobat.PomodorosController extends Batman.Controller
   donePomodoro: =>
     pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'finished')
+    pomodoro.save
     alert("Pomodoro done!")
 
   togglePomodoro: ->
@@ -110,7 +111,8 @@ class Pomobat.Pomodoro extends Batman.Model
   @accessor 'new', ->
     if @get('state') == 'new' then true else false
 
-
+  @classAccessor 'finished', ->
+    @get('all').filter (pomodoro) -> pomodoro.get('state') == 'finished'
 
 # Make Pomobat available in the global namespace so it can be used
 # as a namespace and bound to in views.
