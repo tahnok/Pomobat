@@ -2,40 +2,48 @@
 <html lang="en">
 <head>
   <title>Pomobat</title>
-
+  <link href="/assets/css/bootstrap.css" rel="stylesheet">
+  <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+  <style type="text/css">
+    #yeah{
+      text-align: center;
+    }
+  </style>
   <script src="/batman/coffee-script.js" type="text/javascript"></script>
   <script src="/batman/es5-shim.js" type="text/javascript"></script>
   <script src="/batman/dist/batman.js" type="text/javascript"></script>
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+  <script src="/assets/js/bootstrap.js"type="text/javascript"></script>
   <script src="pomobat.js" type="text/javascript"></script>
 </head>
 
 <body>
-  <center>
-  <div data-yield="main"></div>
-  <div data-defineview="pomodoros/all">
-    <h1>Pomoboat</h1>
-    <div data-showif="currentPomodoro.new">
-      <form data-formfor-pomodoro="currentPomodoro" data-event-submit="startPomodoro">
-        <button><h3>Start</h3></button>
-        <br>
-        <br>
-        <input id="currentPomodoro" placeholder="what are you working on?" autofocus type="text" data-bind="pomodoro.title" >
-      </form>
-    </div>
-    <div data-hideif="currentPomodoro.new">
-      <span data-showif="currentPomodoro.title.length">Working on: </span><span data-bind="currentPomodoro.title"></span>
-      <h2 data-bind="timeLeft"></h2>
-      <div data-hideif="currentPomodoro.finished">
-        <button data-event-click="togglePomodoro">Pause/Resume</button>
-        <button data-event-click="stopPomodoro">Cancel</button>
+  <div data-yield="main" ></div>
+  <div data-defineview="pomodoros/all" >
+    <div id="yeah" class="span4">
+      <div class="page-header">
+        <h1>Pomobat</h1>
       </div>
-      <div data-showif="currentPomodoro.finished">
-        <button data-event-click="startBreak">Break time</button>
-        <button data-event-click="createPomodoro">New Pomodoro</button>
+      <div data-showif="currentPomodoro.new">
+        <form data-formfor-pomodoro="currentPomodoro" data-event-submit="startPomodoro" class="well">
+          <a href="#" class="btn btn-large btn-success" data-event-click="startPomodoro"><i class="icon-play icon-white"></i> Start</a>
+          <br>
+          <br>
+          <label><input id="currentPomodoro" placeholder="what are you working on?" type="text" data-bind="pomodoro.title"> <i>Optional</i></label>
+        </form>
+      </div>
+      <div data-hideif="currentPomodoro.new" class="well">
+        <span data-showif="currentPomodoro.title.length">Working on: </span><span data-bind="currentPomodoro.title"></span>
+        <h2 data-bind="timeLeft"></h2>
+        <div data-hideif="currentPomodoro.finished">
+          <a href="#" class="btn" data-event-click="togglePomodoro"><i class="icon-pause"></i> Pause/Resume</a> <a href="#" class="btn btn-danger" data-event-click="stopPomodoro"><i class="icon-stop icon-white"></i> Cancel</a>
+        </div>
+        <div data-showif="currentPomodoro.finished">
+          <a href="#" class="btn btn-success" data-event-click="startBreak"><i class="icon-thumbs-up icon-white"></i> Break time</a>
+          <a href="#" class="btn btn-inverse" data-event-click="createPomodoro"><i class="icon-repeat icon-white"></i> New Pomodoro</a>
+        </div>
       </div>
     </div>
   </div>
-  </center>
 </body>
 </html>
