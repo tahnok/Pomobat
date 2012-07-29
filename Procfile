@@ -1,1 +1,1 @@
-web: batman server
+web: batman server -p $PORT
