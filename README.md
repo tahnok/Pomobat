@@ -2,9 +2,13 @@
 
 Requires batman.js to run
 
+
+### Logo
+
+Images from [Chrisdesign](http://openclipart.org/detail/4783/tomato-by-chrisdesign-4783) and [liftan](http://openclipart.org/detail/4783/tomato-by-chrisdesign-4783)
+
+
 ### License
-
-
 
 Copyright (c) 2012 Wesley Ellis
 

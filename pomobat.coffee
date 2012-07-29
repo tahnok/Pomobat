@@ -32,7 +32,7 @@ class Pomobat.PomodorosController extends Batman.Controller
   donePomodoro: =>
     pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'finished')
-    pomodoro.save
+    pomodoro.save()
     alert("Pomodoro done!")
 
   togglePomodoro: ->

@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Pomobat</title>
+
+  <meta name="Pomobat" content="A web based pomodoro app">
+  <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
   <link href="/assets/css/bootstrap.css" rel="stylesheet">
   <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
   <style type="text/css">
@@ -22,14 +27,14 @@
   <div data-defineview="pomodoros/all" >
     <div id="yeah" class="span4">
       <div class="page-header">
-        <h1>Pomobat</h1>
+        <h1>Pomobat <img src="/assets/img/logo.png" alt="pomobat logo"> </h1>
       </div>
       <div data-showif="currentPomodoro.new">
         <form data-formfor-pomodoro="currentPomodoro" data-event-submit="startPomodoro" class="well">
           <a href="#" class="btn btn-large btn-success" data-event-click="startPomodoro"><i class="icon-play icon-white"></i> Start</a>
           <br>
           <br>
-          <label><input id="currentPomodoro" placeholder="what are you working on?" type="text" data-bind="pomodoro.title"> <i>Optional</i></label>
+          <label><input id="currentPomodoro" placeholder="what are you working on? (optional)" type="text" data-bind="pomodoro.title"></label>
         </form>
       </div>
       <div data-hideif="currentPomodoro.new" class="well">
@@ -45,10 +50,10 @@
       </div>
       <div>
         Pomodoros completed: <span data-bind="Pomodoro.finished.length" class="badge badge-success"></span>
-      <!--         <ul>
-          <li data-foreach-pomodoro="pomodoros"><span data-bind="pomodoro.title"></span>
+        <ul>
+          <li data-foreach-pomodoro="Pomodoro.finshed"><span data-bind="pomodoro.title"></span>
           </li>
-        </ul> -->
+        </ul>
       </div>
       <footer><a href="mailto:tahnok@gmail.com">Wesley Ellis</a>, <a href="https://github.com/tahnok/Pomobat">Source</a></footer>
     </div>
