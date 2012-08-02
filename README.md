@@ -2,6 +2,14 @@
 
 Requires batman.js to run
 
+## TODO
+
+ * Popout mode
+ * Help section
+ * configurable time
+ * longer break after 4
+ * rating
+ * time remaining in title bar?
 
 ### Logo
 

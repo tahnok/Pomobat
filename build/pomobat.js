@@ -60,9 +60,9 @@
       var pomodoro;
       pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'running');
-      pomodoro.set('timeLeft', '0:10');
+      pomodoro.set('timeLeft', '25:00');
       pomodoro.save();
-      return this.startTimer('0:10', this.donePomodoro, this.updatePomodoro);
+      return this.startTimer('25:00', this.donePomodoro, this.updatePomodoro);
     };
 
     PomodorosController.prototype.updatePomodoro = function(time) {
@@ -73,7 +73,7 @@
       var pomodoro;
       pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'finished');
-      pomodoro.save;
+      pomodoro.save();
       return alert("Pomodoro done!");
     };
 
@@ -112,7 +112,7 @@
     };
 
     PomodorosController.prototype.startBreak = function() {
-      return this.startTimer("0:05", this.doneBreak);
+      return this.startTimer("5:00", this.doneBreak);
     };
 
     PomodorosController.prototype.doneBreak = function() {

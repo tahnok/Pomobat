@@ -22,9 +22,9 @@ class Pomobat.PomodorosController extends Batman.Controller
   startPomodoro: ->
     pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'running')
-    pomodoro.set('timeLeft', '0:10')
+    pomodoro.set('timeLeft', '25:00')
     pomodoro.save()
-    @startTimer('0:10', @donePomodoro, @updatePomodoro)
+    @startTimer('25:00', @donePomodoro, @updatePomodoro)
 
   updatePomodoro: (time) =>
     @get('currentPomodoro').set('timeLeft', time)
@@ -61,7 +61,7 @@ class Pomobat.PomodorosController extends Batman.Controller
     @createPomodoro()
 
   startBreak: ->
-    @startTimer("0:05", @doneBreak)
+    @startTimer("5:00", @doneBreak)
 
   doneBreak: =>
     alert("break's over! get back to work!")
