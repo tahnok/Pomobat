@@ -33,6 +33,7 @@ class Pomobat.PomodorosController extends Batman.Controller
     pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'finished')
     pomodoro.save()
+    $('#sound').html("<embed src='assets/sound/done2.wav' hidden='true' autostart='true' loop='false'>")
     alert("Pomodoro done!")
 
   togglePomodoro: ->

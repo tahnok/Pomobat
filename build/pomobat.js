@@ -74,6 +74,7 @@
       pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'finished');
       pomodoro.save();
+      $('#sound').html("<embed src='assets/sound/done2.wav' hidden='true' autostart='true' loop='false'>");
       return alert("Pomodoro done!");
     };
 
