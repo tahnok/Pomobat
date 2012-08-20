@@ -11,7 +11,7 @@ class Pomobat.PomodorosController extends Batman.Controller
   all: ->
     @set('pomodoros', Pomobat.Pomodoro.get('all'))
 
-  createPomodoro: ->
+  newPomodoro: ->
     @get('currentPomodoro').save (err, pomodoro) =>
       if err
         throw err unless err instanceof Batman.ErrorsSet
@@ -59,22 +59,20 @@ class Pomobat.PomodorosController extends Batman.Controller
     @stopTimer()
     pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'cancelled')
-    @createPomodoro()
+    @newPomodoro()
 
   startBreak: ->
     @startTimer("5:00", @doneBreak)
 
   doneBreak: =>
     alert("break's over! get back to work!")
-    @createPomodoro()
+    @newPomodoro()
 
   startTimer:(time, done, update) ->
     @set('timeLeft', time)
     window.tick = =>
       @tick(done, update)
     @set('timeoutID', setTimeout(window.tick, 1000))
-
-  pauseTimer: ->
 
   stopTimer: ->
     window.clearTimeout(@get('timeoutID'))
