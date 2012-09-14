@@ -6,10 +6,10 @@ class Pomobat extends Batman.App
 class Pomobat.PomodorosController extends Batman.Controller
   constructor: ->
      super
+     @set('pomodoros', Pomobat.Pomodoro.get('all'))
      @set('currentPomodoro', new Pomobat.Pomodoro(state: "new"))
 
   all: ->
-    @set('pomodoros', Pomobat.Pomodoro.get('all'))
 
   newPomodoro: ->
     @get('currentPomodoro').save (err, pomodoro) =>
@@ -42,7 +42,6 @@ class Pomobat.PomodorosController extends Batman.Controller
       @resumePomodoro()
     else
       @pausePomodoro()
-    console.log(state)
     @set('paused', !state)
 
   pausePomodoro: ->

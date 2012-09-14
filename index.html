@@ -40,12 +40,17 @@
         </form>
       </div>
       <div id="rateMe"></div>
-      
       <div data-hideif="currentPomodoro.new" class="well">
         <span data-showif="currentPomodoro.title.length">Working on: </span><span data-bind="currentPomodoro.title"></span>
         <h1 data-bind="timeLeft"></h1>
         <div data-hideif="currentPomodoro.finished">
-          <a href="#" class="btn" data-event-click="togglePomodoro"><i class="icon-pause"></i> Pause/Resume</a> <a href="#" class="btn btn-danger" data-event-click="stopPomodoro"><i class="icon-stop icon-white"></i> Cancel</a>
+          <span data-hideif="paused">
+            <a href="#" class="btn" data-event-click="togglePomodoro"><i class="icon-pause"></i> Pause</a>
+          </span>
+          <span data-showif="paused">
+            <a href="#" class="btn" data-event-click="togglePomodoro"><i class="icon-play"></i> Resume</a>
+          </span>
+          <a href="#" class="btn btn-danger" data-event-click="stopPomodoro"><i class="icon-stop icon-white"></i> Cancel</a>
         </div>
         <div data-showif="currentPomodoro.finished">
           <a href="#" class="btn btn-success" data-event-click="startBreak"><i class="icon-thumbs-up icon-white"></i> Break time</a>

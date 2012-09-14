@@ -32,14 +32,13 @@
 
       this.updatePomodoro = __bind(this.updatePomodoro, this);
       PomodorosController.__super__.constructor.apply(this, arguments);
+      this.set('pomodoros', Pomobat.Pomodoro.get('all'));
       this.set('currentPomodoro', new Pomobat.Pomodoro({
         state: "new"
       }));
     }
 
-    PomodorosController.prototype.all = function() {
-      return this.set('pomodoros', Pomobat.Pomodoro.get('all'));
-    };
+    PomodorosController.prototype.all = function() {};
 
     PomodorosController.prototype.newPomodoro = function() {
       var _this = this;
@@ -87,7 +86,6 @@
       } else {
         this.pausePomodoro();
       }
-      console.log(state);
       return this.set('paused', !state);
     };
 
