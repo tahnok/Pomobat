@@ -71,6 +71,7 @@
 
     PomodorosController.prototype.donePomodoro = function() {
       var pomodoro;
+      window.document.title = "Pomodoro";
       pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'finished');
       pomodoro.save();
@@ -78,7 +79,7 @@
       return alert("Pomodoro done!");
     };
 
-    PomodorosController.prototype.togglePomodoro = function() {
+    PomodorosController.prototype.togglePaused = function() {
       var state;
       state = this.get('paused');
       if (state) {
@@ -151,12 +152,17 @@
           seconds = "0" + seconds;
         }
         time = "" + minutes + ":" + seconds;
+        window.document.title = time + " : Pomobat";
         if (update) {
           update(time);
         }
         this.set('timeLeft', time);
         return this.set('timeoutID', setTimeout(window.tick, 1000));
       }
+    };
+
+    PomodorosController.prototype.popout = function() {
+      return window.open('index.html', 'Pomobat', 'height=360,width=400,scrollbar=false');
     };
 
     return PomodorosController;

@@ -30,13 +30,14 @@ class Pomobat.PomodorosController extends Batman.Controller
     @get('currentPomodoro').set('timeLeft', time)
 
   donePomodoro: =>
+    window.document.title = "Pomodoro"
     pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'finished')
     pomodoro.save()
     $('#sound').html("<embed src='assets/sound/done2.wav' hidden='true' autostart='true' loop='false'>")
     alert("Pomodoro done!")
 
-  togglePomodoro: ->
+  togglePaused: ->
     state = @get('paused')
     if state
       @resumePomodoro()
@@ -90,9 +91,14 @@ class Pomobat.PomodorosController extends Batman.Controller
         seconds = seconds - 1
       seconds = "0" + seconds if seconds < 10
       time = "" + minutes + ":" + seconds
+      window.document.title = time + " : Pomobat"
       update(time) if update
       @set('timeLeft', time)
       @set('timeoutID', setTimeout(window.tick, 1000))
+
+
+  popout: ->
+    window.open('index.html', 'Pomobat', 'height=360,width=400,scrollbar=false')
 
 
 class Pomobat.Pomodoro extends Batman.Model

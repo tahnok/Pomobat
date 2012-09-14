@@ -9,7 +9,10 @@ Requires batman.js to run
  * configurable time
  * longer break after 4
  * rating
- * time remaining in title bar?
+
+## Bugs
+
+ * Timer doesn't tick when screen is off on android
 
 ### Logo
 

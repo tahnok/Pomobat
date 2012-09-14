@@ -14,6 +14,10 @@
     text-align: center;
   }
   #slider { margin: 10px; }
+  #popout{
+    float: right;
+    display: block;
+  }
   </style>
   <script src="assets/js/coffee-script.js" type="text/javascript"></script>
   <script src="assets/js/es5-shim.js" type="text/javascript"></script>
@@ -28,6 +32,7 @@
   <div data-yield="main" ></div>
   <div data-defineview="pomodoros/all" >
     <div id="yeah" class="span4">
+      <div id="popout"><a href="#" data-event-click="popout"></a></div>
       <div class="page-header">
         <h1>Pomobat <img src="assets/img/logo.png" alt="pomobat logo"> </h1>
       </div>
@@ -45,10 +50,10 @@
         <h1 data-bind="timeLeft"></h1>
         <div data-hideif="currentPomodoro.finished">
           <span data-hideif="paused">
-            <a href="#" class="btn" data-event-click="togglePomodoro"><i class="icon-pause"></i> Pause</a>
+            <a href="#" class="btn" data-event-click="togglePaused"><i class="icon-pause"></i> Pause/Resume</a>
           </span>
           <span data-showif="paused">
-            <a href="#" class="btn" data-event-click="togglePomodoro"><i class="icon-play"></i> Resume</a>
+            <a href="#" class="btn" data-event-click="togglePaused"><i class="icon-play"></i> Resume</a>
           </span>
           <a href="#" class="btn btn-danger" data-event-click="stopPomodoro"><i class="icon-stop icon-white"></i> Cancel</a>
         </div>
@@ -62,7 +67,6 @@
       </div>
       <footer><a href="mailto:tahnok@gmail.com">Wesley Ellis</a>, <a href="https://github.com/tahnok/Pomobat">Source</a></footer>
     </div>
-
   </div>
   <span id="sound"></span>
 </body>
