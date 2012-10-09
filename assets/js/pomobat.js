@@ -36,6 +36,15 @@
       this.set('currentPomodoro', new Pomobat.Pomodoro({
         state: "new"
       }));
+      this.set('sessionPomodoros', 0);
+      this.set('finishPomodoroSound', new buzz.sound('assets/sound/done2', {
+        'preload': true,
+        'formats': ['mp3', 'ogg']
+      }));
+      this.set('finishBreakSound', new buzz.sound('assets/sound/break_done', {
+        'preload': true,
+        'formats': ['mp3', 'ogg']
+      }));
     }
 
     PomodorosController.prototype.all = function() {};
@@ -75,7 +84,8 @@
       pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'finished');
       pomodoro.save();
-      $('#sound').html("<embed src='assets/sound/done2.wav' hidden='true' autostart='true' loop='false'>");
+      this.set('sessionPomodoros', this.get('sessionPomodoros') + 1);
+      this.get('finishPomodoroSound').play();
       return alert("Pomodoro done!");
     };
 
@@ -107,16 +117,24 @@
     PomodorosController.prototype.stopPomodoro = function() {
       var pomodoro;
       this.stopTimer();
+      window.document.title = "Pomodoro";
       pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'cancelled');
       return this.newPomodoro();
     };
 
     PomodorosController.prototype.startBreak = function() {
-      return this.startTimer("5:00", this.doneBreak);
+      var time;
+      if (this.get('sessionPomodoros') % 4 === 0) {
+        time = "20:00";
+      } else {
+        time = "5:00";
+      }
+      return this.startTimer(time, this.doneBreak);
     };
 
     PomodorosController.prototype.doneBreak = function() {
+      this.get('finishBreakSound').play();
       alert("break's over! get back to work!");
       return this.newPomodoro();
     };

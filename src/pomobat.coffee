@@ -8,6 +8,11 @@ class Pomobat.PomodorosController extends Batman.Controller
      super
      @set('pomodoros', Pomobat.Pomodoro.get('all'))
      @set('currentPomodoro', new Pomobat.Pomodoro(state: "new"))
+     @set('sessionPomodoros', 0)
+     @set('finishPomodoroSound', new buzz.sound('assets/sound/done2',
+                                                {'preload': true, 'formats': ['mp3', 'ogg']}))
+     @set('finishBreakSound', new buzz.sound('assets/sound/break_done',
+                                                {'preload': true, 'formats': ['mp3', 'ogg']}))
 
   all: ->
 
@@ -34,7 +39,8 @@ class Pomobat.PomodorosController extends Batman.Controller
     pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'finished')
     pomodoro.save()
-    $('#sound').html("<embed src='assets/sound/done2.wav' hidden='true' autostart='true' loop='false'>")
+    @set('sessionPomodoros', @get('sessionPomodoros') + 1)
+    @get('finishPomodoroSound').play()
     alert("Pomodoro done!")
 
   togglePaused: ->
@@ -57,14 +63,20 @@ class Pomobat.PomodorosController extends Batman.Controller
 
   stopPomodoro: ->
     @stopTimer()
+    window.document.title = "Pomodoro"
     pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'cancelled')
     @newPomodoro()
 
   startBreak: ->
-    @startTimer("5:00", @doneBreak)
+    if @get('sessionPomodoros') % 4 == 0
+      time = "20:00"
+    else
+      time = "5:00"
+    @startTimer(time, @doneBreak)
 
   doneBreak: =>
+    @get('finishBreakSound').play()
     alert("break's over! get back to work!")
     @newPomodoro()
 
