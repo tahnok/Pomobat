@@ -180,7 +180,9 @@
     };
 
     PomodorosController.prototype.popout = function() {
-      return window.open('index.html', 'Pomobat', 'height=360,width=400,scrollbar=false');
+      window.open('index.html', 'Pomobat', 'height=360,width=400,scrollbar=false');
+      window.close();
+      return console.log("tried to close window");
     };
 
     return PomodorosController;
@@ -232,6 +234,20 @@
     });
 
     return Pomodoro;
+
+  })(Batman.Model);
+
+  Pomobat.Settings = (function(_super) {
+
+    __extends(Settings, _super);
+
+    function Settings() {
+      return Settings.__super__.constructor.apply(this, arguments);
+    }
+
+    Settings.persist(Batman.LocalStorage);
+
+    return Settings;
 
   })(Batman.Model);
 

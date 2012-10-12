@@ -1,3 +1,4 @@
+
 Batman.config.minificationErrors = false
 
 class Pomobat extends Batman.App
@@ -108,10 +109,10 @@ class Pomobat.PomodorosController extends Batman.Controller
       @set('timeLeft', time)
       @set('timeoutID', setTimeout(window.tick, 1000))
 
-
   popout: ->
     window.open('index.html', 'Pomobat', 'height=360,width=400,scrollbar=false')
-
+    window.close()
+    console.log("tried to close window")
 
 class Pomobat.Pomodoro extends Batman.Model
   @encode 'title', 'state', 'timeLeft'
@@ -129,6 +130,10 @@ class Pomobat.Pomodoro extends Batman.Model
 
   @classAccessor 'finished', ->
     @get('all').filter (pomodoro) -> pomodoro.get('state') == 'finished'
+
+class Pomobat.Settings extends Batman.Model
+  @persist Batman.LocalStorage
+  #encode time, notification settings
 
 # Make Pomobat available in the global namespace so it can be used
 # as a namespace and bound to in views.
