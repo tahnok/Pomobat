@@ -8,12 +8,20 @@ class Pomobat.PomodorosController extends Batman.Controller
   constructor: ->
      super
      @set('pomodoros', Pomobat.Pomodoro.get('all'))
-     @set('currentPomodoro', new Pomobat.Pomodoro(state: "new"))
+     @set('currentPomodoro', new Pomobat.Pomodoro())
      @set('sessionPomodoros', 0)
      @set('finishPomodoroSound', new buzz.sound('assets/sound/done2',
                                                 {'preload': true, 'formats': ['mp3', 'ogg']}))
      @set('finishBreakSound', new buzz.sound('assets/sound/break_done',
                                                 {'preload': true, 'formats': ['mp3', 'ogg']}))
+     @setDefault('work_time', '25:00')
+     @setDefault('break_time', '5:00')
+     @setDefault('long_break_time', '20:00')
+     @setDefault('use_sounds', 'true')
+
+  setDefault:(key, value) ->
+    if typeof localStorage[key] is 'undefined'
+      localStorage[key] = value
 
   all: ->
 
@@ -22,15 +30,14 @@ class Pomobat.PomodorosController extends Batman.Controller
       if err
         throw err unless err instanceof Batman.ErrorsSet
       else
-        @set('currentPomodoro', new Pomobat.Pomodoro(state: "new"))
+        @set('currentPomodoro', new Pomobat.Pomodoro())
         @set('paused', false)
 
   startPomodoro: ->
     pomodoro = @get('currentPomodoro')
     pomodoro.set('state', 'running')
-    pomodoro.set('timeLeft', '25:00')
     pomodoro.save()
-    @startTimer('25:00', @donePomodoro, @updatePomodoro)
+    @startTimer(localStorage.work_time, @donePomodoro, @updatePomodoro)
 
   updatePomodoro: (time) =>
     @get('currentPomodoro').set('timeLeft', time)
@@ -41,7 +48,7 @@ class Pomobat.PomodorosController extends Batman.Controller
     pomodoro.set('state', 'finished')
     pomodoro.save()
     @set('sessionPomodoros', @get('sessionPomodoros') + 1)
-    @get('finishPomodoroSound').play()
+    @get('finishPomodoroSound').play() if localStorage.use_sounds == 'true'
     alert("Pomodoro done!")
 
   togglePaused: ->
@@ -71,13 +78,13 @@ class Pomobat.PomodorosController extends Batman.Controller
 
   startBreak: ->
     if @get('sessionPomodoros') % 4 == 0
-      time = "20:00"
+      time = localStorage.long_break_time
     else
-      time = "5:00"
+      time = localStorage.break_time
     @startTimer(time, @doneBreak)
 
   doneBreak: =>
-    @get('finishBreakSound').play()
+    @get('finishBreakSound').play() if localStorage.use_sounds == 'true'
     alert("break's over! get back to work!")
     @newPomodoro()
 
@@ -104,7 +111,7 @@ class Pomobat.PomodorosController extends Batman.Controller
         seconds = seconds - 1
       seconds = "0" + seconds if seconds < 10
       time = "" + minutes + ":" + seconds
-      window.document.title = time + " : Pomobat"
+      window.document.title = time + " | Pomobat"
       update(time) if update
       @set('timeLeft', time)
       @set('timeoutID', setTimeout(window.tick, 1000))
@@ -114,10 +121,27 @@ class Pomobat.PomodorosController extends Batman.Controller
     window.close()
     console.log("tried to close window")
 
+  loadFormSettings: ->
+    $('#work_time').val(localStorage.work_time)
+    $('#break_time').val(localStorage.break_time)
+    $('#long_break_time').val(localStorage.long_break_time)
+    $('#use_sounds').prop('checked', localStorage.use_sounds == 'true')
+
+  saveFormSettings: ->
+    for value in ['work_time', 'break_time', 'long_break_time']
+      form_val = $('#' + value).val()
+      localStorage[value] = form_val unless form_val == ''
+    localStorage.use_sounds = $('#use_sounds').prop('checked') + ''
+
+
 class Pomobat.Pomodoro extends Batman.Model
   @encode 'title', 'state', 'timeLeft'
   @persist Batman.LocalStorage
   @storageKey: 'pomodoros-batman'
+
+  constructor: ->
+    @set('state', 'new')
+    @set('timeLeft', localStorage.work_time)
 
   @accessor 'running', ->
     if @get('state') == 'running' then true else false
@@ -125,15 +149,11 @@ class Pomobat.Pomodoro extends Batman.Model
   @accessor 'finished', ->
     if @get('state') == 'finished' then true else false
 
-  @accessor 'new', ->
+  @accessor 'is_new', ->
     if @get('state') == 'new' then true else false
 
   @classAccessor 'finished', ->
     @get('all').filter (pomodoro) -> pomodoro.get('state') == 'finished'
-
-class Pomobat.Settings extends Batman.Model
-  @persist Batman.LocalStorage
-  #encode time, notification settings
 
 # Make Pomobat available in the global namespace so it can be used
 # as a namespace and bound to in views.

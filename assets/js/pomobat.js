@@ -33,9 +33,7 @@
       this.updatePomodoro = __bind(this.updatePomodoro, this);
       PomodorosController.__super__.constructor.apply(this, arguments);
       this.set('pomodoros', Pomobat.Pomodoro.get('all'));
-      this.set('currentPomodoro', new Pomobat.Pomodoro({
-        state: "new"
-      }));
+      this.set('currentPomodoro', new Pomobat.Pomodoro());
       this.set('sessionPomodoros', 0);
       this.set('finishPomodoroSound', new buzz.sound('assets/sound/done2', {
         'preload': true,
@@ -45,7 +43,17 @@
         'preload': true,
         'formats': ['mp3', 'ogg']
       }));
+      this.setDefault('work_time', '25:00');
+      this.setDefault('break_time', '5:00');
+      this.setDefault('long_break_time', '20:00');
+      this.setDefault('use_sounds', 'true');
     }
+
+    PomodorosController.prototype.setDefault = function(key, value) {
+      if (typeof localStorage[key] === 'undefined') {
+        return localStorage[key] = value;
+      }
+    };
 
     PomodorosController.prototype.all = function() {};
 
@@ -57,9 +65,7 @@
             throw err;
           }
         } else {
-          _this.set('currentPomodoro', new Pomobat.Pomodoro({
-            state: "new"
-          }));
+          _this.set('currentPomodoro', new Pomobat.Pomodoro());
           return _this.set('paused', false);
         }
       });
@@ -69,9 +75,8 @@
       var pomodoro;
       pomodoro = this.get('currentPomodoro');
       pomodoro.set('state', 'running');
-      pomodoro.set('timeLeft', '25:00');
       pomodoro.save();
-      return this.startTimer('25:00', this.donePomodoro, this.updatePomodoro);
+      return this.startTimer(localStorage.work_time, this.donePomodoro, this.updatePomodoro);
     };
 
     PomodorosController.prototype.updatePomodoro = function(time) {
@@ -85,7 +90,9 @@
       pomodoro.set('state', 'finished');
       pomodoro.save();
       this.set('sessionPomodoros', this.get('sessionPomodoros') + 1);
-      this.get('finishPomodoroSound').play();
+      if (localStorage.use_sounds === 'true') {
+        this.get('finishPomodoroSound').play();
+      }
       return alert("Pomodoro done!");
     };
 
@@ -126,15 +133,17 @@
     PomodorosController.prototype.startBreak = function() {
       var time;
       if (this.get('sessionPomodoros') % 4 === 0) {
-        time = "20:00";
+        time = localStorage.long_break_time;
       } else {
-        time = "5:00";
+        time = localStorage.break_time;
       }
       return this.startTimer(time, this.doneBreak);
     };
 
     PomodorosController.prototype.doneBreak = function() {
-      this.get('finishBreakSound').play();
+      if (localStorage.use_sounds === 'true') {
+        this.get('finishBreakSound').play();
+      }
       alert("break's over! get back to work!");
       return this.newPomodoro();
     };
@@ -170,7 +179,7 @@
           seconds = "0" + seconds;
         }
         time = "" + minutes + ":" + seconds;
-        window.document.title = time + " : Pomobat";
+        window.document.title = time + " | Pomobat";
         if (update) {
           update(time);
         }
@@ -185,6 +194,26 @@
       return console.log("tried to close window");
     };
 
+    PomodorosController.prototype.loadFormSettings = function() {
+      $('#work_time').val(localStorage.work_time);
+      $('#break_time').val(localStorage.break_time);
+      $('#long_break_time').val(localStorage.long_break_time);
+      return $('#use_sounds').prop('checked', localStorage.use_sounds === 'true');
+    };
+
+    PomodorosController.prototype.saveFormSettings = function() {
+      var form_val, value, _i, _len, _ref;
+      _ref = ['work_time', 'break_time', 'long_break_time'];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        value = _ref[_i];
+        form_val = $('#' + value).val();
+        if (form_val !== '') {
+          localStorage[value] = form_val;
+        }
+      }
+      return localStorage.use_sounds = $('#use_sounds').prop('checked') + '';
+    };
+
     return PomodorosController;
 
   })(Batman.Controller);
@@ -193,15 +222,16 @@
 
     __extends(Pomodoro, _super);
 
-    function Pomodoro() {
-      return Pomodoro.__super__.constructor.apply(this, arguments);
-    }
-
     Pomodoro.encode('title', 'state', 'timeLeft');
 
     Pomodoro.persist(Batman.LocalStorage);
 
     Pomodoro.storageKey = 'pomodoros-batman';
+
+    function Pomodoro() {
+      this.set('state', 'new');
+      this.set('timeLeft', localStorage.work_time);
+    }
 
     Pomodoro.accessor('running', function() {
       if (this.get('state') === 'running') {
@@ -219,7 +249,7 @@
       }
     });
 
-    Pomodoro.accessor('new', function() {
+    Pomodoro.accessor('is_new', function() {
       if (this.get('state') === 'new') {
         return true;
       } else {
@@ -234,20 +264,6 @@
     });
 
     return Pomodoro;
-
-  })(Batman.Model);
-
-  Pomobat.Settings = (function(_super) {
-
-    __extends(Settings, _super);
-
-    function Settings() {
-      return Settings.__super__.constructor.apply(this, arguments);
-    }
-
-    Settings.persist(Batman.LocalStorage);
-
-    return Settings;
 
   })(Batman.Model);
 
