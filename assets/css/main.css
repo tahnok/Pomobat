@@ -1,0 +1,29 @@
+#main{
+  text-align: center;
+  float: none;
+  margin: auto;
+}
+#popout{
+  float: right;
+  display: block;
+}
+#settings{
+  display:none;
+  padding: 1em;
+  text-align: left;
+}
+#settings input{
+  width: 4em;
+}
+#clear-settings{
+  float: right;
+}
+@font-face {
+  font-family: 'Audiowide';
+  font-style: normal;
+  font-weight: 400;
+  src: local('MontserratSubrayada-Regular'), url(../fonts/Audiowide.woff) format('woff');
+}
+#heading{
+  font-family: 'Audiowide', sans-serif;
+}
