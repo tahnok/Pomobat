@@ -30,6 +30,15 @@
     #clear-settings{
       float: right;
     }
+    @font-face {
+      font-family: 'Audiowide';
+      font-style: normal;
+      font-weight: 400;
+      src: local('MontserratSubrayada-Regular'), url(assets/fonts/Audiowide.woff) format('woff');
+    }
+    #heading{
+      font-family: 'Audiowide', sans-serif;
+    }
   </style>
   <script src="assets/js/coffee-script.js" type="text/javascript"></script>
   <script src="assets/js/es5-shim.js" type="text/javascript"></script>
@@ -49,7 +58,7 @@
         <a href="#" data-event-click="showSettings"><i class="icon-cog"></i></a>
         <a href="#" data-event-click="popout"><i class="icon-share"></i></a></div>
       <div class="page-header">
-        <h1>Pomobat <img src="assets/img/logo.png" alt="pomobat logo"> </h1>
+        <h1 id="heading">Pomobat <img src="assets/img/logo.png" alt="pomobat logo"> </h1>
       </div>
       <div id="settings" class="well">
         Settings:
