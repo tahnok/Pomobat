@@ -15,7 +15,7 @@
       return Pomobat.__super__.constructor.apply(this, arguments);
     }
 
-    Pomobat.root('pomodoros#all');
+    Pomobat.root('pomodoros#index');
 
     return Pomobat;
 
@@ -55,7 +55,9 @@
       }
     };
 
-    PomodorosController.prototype.all = function() {};
+    PomodorosController.prototype.index = function() {};
+
+    PomodorosController.prototype.settings = function() {};
 
     PomodorosController.prototype.newPomodoro = function() {
       var _this = this;
@@ -192,6 +194,16 @@
       window.open('index.html', 'Pomobat', 'height=360,width=400,scrollbar=false');
       window.close();
       return console.log("tried to close window");
+    };
+
+    PomodorosController.prototype.showSettings = function() {
+      $('#settings').slideToggle();
+      return this.loadFormSettings();
+    };
+
+    PomodorosController.prototype.hideSettings = function() {
+      this.saveFormSettings();
+      return $('#settings').slideToggle();
     };
 
     PomodorosController.prototype.loadFormSettings = function() {

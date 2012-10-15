@@ -2,7 +2,7 @@
 Batman.config.minificationErrors = false
 
 class Pomobat extends Batman.App
-  @root 'pomodoros#all'
+  @root 'pomodoros#index'
 
 class Pomobat.PomodorosController extends Batman.Controller
   constructor: ->
@@ -23,7 +23,10 @@ class Pomobat.PomodorosController extends Batman.Controller
     if typeof localStorage[key] is 'undefined'
       localStorage[key] = value
 
-  all: ->
+  index: ->
+
+  settings: ->
+
 
   newPomodoro: ->
     @get('currentPomodoro').save (err, pomodoro) =>
@@ -120,6 +123,14 @@ class Pomobat.PomodorosController extends Batman.Controller
     window.open('index.html', 'Pomobat', 'height=360,width=400,scrollbar=false')
     window.close()
     console.log("tried to close window")
+
+  showSettings: ->
+    $('#settings').slideToggle()
+    @loadFormSettings()
+
+  hideSettings: ->
+    @saveFormSettings()
+    $('#settings').slideToggle()
 
   loadFormSettings: ->
     $('#work_time').val(localStorage.work_time)

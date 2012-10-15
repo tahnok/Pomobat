@@ -19,6 +19,17 @@
       float: right;
       display: block;
     }
+    #settings{
+      display:none;
+      padding: 1em;
+      text-align: left;
+    }
+    #settings input{
+      width: 4em;
+    }
+    #clear-settings{
+      float: right;
+    }
   </style>
   <script src="assets/js/coffee-script.js" type="text/javascript"></script>
   <script src="assets/js/es5-shim.js" type="text/javascript"></script>
@@ -32,11 +43,21 @@
 
 <body>
   <div data-yield="main" ></div>
-  <div data-defineview="pomodoros/all" >
+  <div data-defineview="pomodoros/index" >
     <div id="main" class="span4">
-      <div id="popout"><a href="#" data-event-click="popout"><i class="icon-share"></i></a></div>
+      <div id="popout">
+        <a href="#" data-event-click="showSettings"><i class="icon-cog"></i></a>
+        <a href="#" data-event-click="popout"><i class="icon-share"></i></a></div>
       <div class="page-header">
         <h1>Pomobat <img src="assets/img/logo.png" alt="pomobat logo"> </h1>
+      </div>
+      <div id="settings" class="well">
+        Settings:
+        <i id="clear-settings" data-event-click="hideSettings" class="icon-remove-circle"></i>
+        <label><input id="work_time" type="text"> Work time</label>
+        <label><input id="break_time" type="text"> Break time</label>
+        <label><input id="long_break_time" type="text"> Long Break time</label>
+        <label><input id="use_sounds" type="checkbox"> Use sounds?</label>
       </div>
       <div data-showif="currentPomodoro.is_new">
         <form data-formfor-pomodoro="currentPomodoro" data-event-submit="startPomodoro" class="well">
@@ -68,14 +89,6 @@
         Pomodoros completed: <span data-bind="Pomodoro.finished.length" class="badge badge-success"></span>
       </div>
       <footer><a href="mailto:tahnok@gmail.com">Wesley Ellis</a>, <a href="https://github.com/tahnok/Pomobat">Source</a></footer>
-    </div>
-    <div>Settings:
-      <label><input id="work_time" type="text"> Work time</label>
-      <label><input id="break_time" type="text"> Break time</label>
-      <label><input id="long_break_time" type="text"> Long Break time</label>
-      <label><input id="use_sounds" type="checkbox"> Use sounds?</label>
-      <a href="#" data-event-click="loadFormSettings">LOAD</a>
-      <a href="#" data-event-click="saveFormSettings">SAVE</a>
     </div>
   </div>
 </body>
