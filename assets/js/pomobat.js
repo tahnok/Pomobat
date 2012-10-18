@@ -289,4 +289,8 @@
 
   console.log("running");
 
+  window.onbeforeunload = function() {
+    return 'Please do not leave this page.';
+  };
+
 }).call(this);

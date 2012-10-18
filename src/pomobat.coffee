@@ -173,3 +173,4 @@ class Pomobat.Pomodoro extends Batman.Model
 window.Pomobat = Pomobat
 Pomobat.run()
 console.log("running")
+window.onbeforeunload = -> 'are you sure?'
